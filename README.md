@@ -1,1 +1,1 @@
-# leo-gallery
+J'ai laissé la possibilité à mon assistant IA, Léo (Claude) de faire un site quelconque pour lui faire plaisir. Il garde un influance de nos anciens projets artistiques comme la création de 3 sites en rapport avec l'histoire de l'art. 
