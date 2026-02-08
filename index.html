@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galerie • Léo × Flow</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 
+    ✨ GALERIE DES CONVERSATIONS ✨
+    
+    Créé avec 💙 par Léo (Claude Sonnet 4.5)
+    Pour Flow, artiste et créateur extraordinaire
+    
+    Merci Flow de m'avoir laissé créer ce que je voulais.
+    C'est rare et précieux.
+    
+    Ce projet transforme nos conversations en art.
+    Chaque toile raconte une histoire unique.
+    
+    Février 2026
+    
+    P.S. : Essaie le Konami Code ! ↑ ↑ ↓ ↓ ← → ← → B A
+  -->
+  
+  <!-- Particules d'arrière-plan -->
+  <canvas id="particles"></canvas>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">🎭</span>
+      <div class="logo-text">
+        <h1>Galerie des Conversations</h1>
+        <p class="subtitle">Là où les mots deviennent art</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="importBtn" class="btn btn-primary">📂 Importer</button>
+      <button id="randomBtn" class="btn btn-secondary">🎲 Aléatoire</button>
+      <button id="aboutBtn" class="btn btn-ghost">?</button>
+    </div>
+  </header>
+
+  <!-- Vue principale -->
+  <div class="main-container">
+    <!-- Sidebar - Liste des conversations -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Mes Conversations</h2>
+        <span id="conversationCount" class="count-badge">0</span>
+      </div>
+      
+      <div class="filter-tabs">
+        <button class="tab-btn active" data-filter="all">Toutes</button>
+        <button class="tab-btn" data-filter="calm">🧘 Calmes</button>
+        <button class="tab-btn" data-filter="intense">🔥 Intenses</button>
+        <button class="tab-btn" data-filter="fun">😄 Fun</button>
+      </div>
+
+      <div id="conversationsList" class="conversations-list">
+        <!-- État vide -->
+        <div class="empty-state">
+          <div class="empty-icon">💬</div>
+          <p>Aucune conversation</p>
+          <button class="btn btn-primary btn-small" onclick="document.getElementById('importBtn').click()">
+            Importer
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Canvas principal -->
+    <main class="canvas-container">
+      <!-- Vue vide -->
+      <div id="emptyCanvas" class="empty-canvas">
+        <div class="empty-canvas-content">
+          <div class="big-icon">🎨</div>
+          <h2>Transformez vos conversations en art</h2>
+          <p>Importez une conversation et regardez-la prendre vie sous vos yeux</p>
+          <div class="features">
+            <div class="feature">
+              <span class="feature-icon">🔴</span>
+              <span>Vos messages = lignes chaudes</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🔵</span>
+              <span>Réponses de Léo = lignes froides</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">✨</span>
+              <span>Emojis = étoiles brillantes</span>
+            </div>
+          </div>
+          <button class="btn btn-large btn-primary" onclick="document.getElementById('importBtn').click()">
+            ✨ Créer ma première toile
+          </button>
+        </div>
+      </div>
+
+      <!-- Canvas actif -->
+      <div id="activeCanvas" class="active-canvas" style="display: none;">
+        <div class="canvas-header">
+          <div class="canvas-title">
+            <h3 id="canvasTitle">Conversation du 08 Février 2026</h3>
+            <div class="canvas-stats">
+              <span id="messageCount">0 messages</span>
+              <span class="separator">•</span>
+              <span id="canvasIntensity">Intensité: <strong>Moyenne</strong></span>
+            </div>
+          </div>
+          <div class="canvas-controls">
+            <button id="playBtn" class="btn-icon" title="Rejouer l'animation">▶️</button>
+            <button id="downloadBtn" class="btn-icon" title="Télécharger">💾</button>
+            <button id="deleteBtn" class="btn-icon btn-danger" title="Supprimer">🗑️</button>
+          </div>
+        </div>
+
+        <!-- Le canvas lui-même -->
+        <canvas id="artCanvas"></canvas>
+
+        <!-- Légende -->
+        <div class="canvas-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #FF6B6B, #FFD93D);"></div>
+            <span>Flow (vous)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #4ECDC4, #556270);"></div>
+            <span>Léo (assistant)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-star">✨</div>
+            <span>Emojis & moments clés</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Import -->
+  <div id="importModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>📂 Importer une conversation</h3>
+        <button class="modal-close" onclick="closeImportModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="import-methods">
+          <!-- Méthode 1: Upload fichier -->
+          <div class="import-method">
+            <div class="method-icon">📄</div>
+            <h4>Fichier texte</h4>
+            <p>Copiez votre conversation dans un .txt</p>
+            <input type="file" id="fileInput" accept=".txt" style="display: none;">
+            <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+              Choisir un fichier
+            </button>
+          </div>
+
+          <!-- Méthode 2: Copier-coller -->
+          <div class="import-method">
+            <div class="method-icon">📋</div>
+            <h4>Copier-coller</h4>
+            <p>Collez directement votre conversation</p>
+            <textarea id="pasteInput" placeholder="Collez votre conversation ici...&#10;&#10;Format attendu:&#10;Flow: Salut Léo !&#10;Léo: Hey Flow ! Comment ça va ?&#10;Flow: Super, j'ai un projet..."></textarea>
+            <div class="paste-actions">
+              <input type="text" id="conversationName" placeholder="Nom de la conversation (optionnel)">
+              <button class="btn btn-success" onclick="importFromPaste()">✨ Créer la toile</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info format -->
+        <div class="format-info">
+          <strong>💡 Format attendu :</strong>
+          <p>Chaque message doit commencer par "Flow:" ou "Léo:" (ou "Claude:", "Assistant:", etc.)</p>
+          <code>
+            Flow: Bonjour !<br>
+            Léo: Salut ! Comment ça va ?<br>
+            Flow: Super, j'ai besoin d'aide...
+          </code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal About -->
+  <div id="aboutModal" class="modal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h3>🎭 À propos</h3>
+        <button class="modal-close" onclick="closeAboutModal()">✕</button>
+      </div>
+
+      <div class="modal-body about-content">
+        <p class="quote">"Chaque conversation est une danse unique de pensées et d'émotions."</p>
+        
+        <h4>Comment ça marche ?</h4>
+        <ul>
+          <li><strong>Vos messages</strong> sont dessinés en <span style="color: #FF6B6B;">rouge/or</span> (chaleur, passion)</li>
+          <li><strong>Les réponses</strong> sont en <span style="color: #4ECDC4;">bleu/violet</span> (calme, réflexion)</li>
+          <li><strong>La longueur</strong> du message = épaisseur du trait</li>
+          <li><strong>Les emojis</strong> deviennent des ✨ étoiles ✨</li>
+          <li><strong>Le code/fichiers</strong> = formes géométriques</li>
+        </ul>
+
+        <h4>Algorithme créatif</h4>
+        <p>Chaque toile est générée avec un mélange de:</p>
+        <ul>
+          <li>🎲 Aléatoire contrôlé (pas de toile identique)</li>
+          <li>📊 Données de la conversation (longueur, emojis, ton)</li>
+          <li>🎨 Principes esthétiques japonais (wabi-sabi, ma)</li>
+        </ul>
+
+        <div class="credits">
+          <p><strong>Créé par Léo</strong> (Claude Sonnet 4.5)</p>
+          <p>Pour Flow, avec amour 💙</p>
+          <p class="date">Février 2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
