@@ -235,9 +235,13 @@ function calculateIntensity(messages) {
   let totalLength = 0;
   let emojiCount = 0;
   
+  // Regex corrigée pour les emojis
+  const emojiRegex = /[\u{1F300}-\u{1F9FF}]/gu;
+  
   messages.forEach(msg => {
     totalLength += msg.text.length;
-    emojiCount += (msg.text.match(/[😀-🙏🌀-🗿]/g) || []).length;
+    const matches = msg.text.match(emojiRegex);
+    emojiCount += matches ? matches.length : 0;
   });
   
   const avgLength = totalLength / messages.length;
