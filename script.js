@@ -235,13 +235,13 @@ function calculateIntensity(messages) {
   let totalLength = 0;
   let emojiCount = 0;
   
-  // Regex corrigée pour les emojis
-  const emojiRegex = /[\u{1F300}-\u{1F9FF}]/gu;
-  
   messages.forEach(msg => {
     totalLength += msg.text.length;
-    const matches = msg.text.match(emojiRegex);
-    emojiCount += matches ? matches.length : 0;
+    // Compter les emojis de manière simple (pas de regex)
+    for (const char of msg.text) {
+      const code = char.codePointAt(0);
+      if (code > 0x1F000) emojiCount++;
+    }
   });
   
   const avgLength = totalLength / messages.length;
@@ -440,7 +440,13 @@ function drawConversation(conversation, animate = true) {
     // Paramètres basés sur le message
     const length = Math.min(msg.text.length * 0.8, 150);
     const thickness = Math.max(2, Math.min(msg.text.length / 50, 12));
-    const emojiCount = (msg.text.match(/[😀-🙏🌀-🗿]/g) || []).length;
+    
+    // Compter les emojis sans regex
+    let emojiCount = 0;
+    for (const char of msg.text) {
+      const code = char.codePointAt(0);
+      if (code > 0x1F000) emojiCount++;
+    }
     
     // Couleur selon le speaker
     let gradient;
