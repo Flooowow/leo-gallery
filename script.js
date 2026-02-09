@@ -439,7 +439,7 @@ function drawConversation(conversation, animate = true) {
     
     // Paramètres basés sur le message
     const length = Math.min(msg.text.length * 0.8, 150);
-    const thickness = Math.max(2, Math.min(msg.text.length / 50, 12));
+    const thickness = Math.max(4, Math.min(msg.text.length / 40, 16));
     
     // Compter les emojis sans regex
     let emojiCount = 0;
